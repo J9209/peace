@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>溫柔的一天</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&family=Long+Cang&display=swap" rel="stylesheet">
 <style>
   html {
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Ma Shan Zheng', 'Nunito', cursive, sans-serif;
   }
   body {
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Ma Shan Zheng', 'Nunito', cursive, sans-serif;
     margin: 0;
     padding: 20px;
     display: flex;
@@ -36,11 +37,16 @@
   }
   h1 { 
     color: #2c4a37; 
-    font-weight: bold; 
+    font-weight: normal;
+    font-family: 'Long Cang', 'Ma Shan Zheng', cursive, sans-serif;
+    font-size: 36px;
     z-index: 1; 
     position: relative; 
     text-align: center; 
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    letter-spacing: 2px;
+    transform: rotate(-1deg);
   }
   .section {
     background: rgba(255, 255, 255, 0.85);
@@ -66,11 +72,14 @@
     text-align: center;
   }
   .quote-text {
-    font-size: 18px;
+    font-family: 'Zhi Mang Xing', 'Ma Shan Zheng', cursive, sans-serif;
+    font-size: 22px;
     color: #2c4a37;
-    font-weight: 500;
-    line-height: 1.6;
+    font-weight: normal;
+    line-height: 1.8;
     margin: 0;
+    letter-spacing: 1px;
+    transform: rotate(0.3deg);
   }
   .quote-emoji {
     font-size: 24px;
@@ -80,19 +89,22 @@
 
   button {
     padding: 12px 25px;
-    margin: 5px;
+    margin: 8px;
     border: none;
     border-radius: 50px;
     cursor: pointer;
-    font-size: 16px;
-    font-family: 'Nunito', sans-serif;
+    font-size: 18px;
+    font-family: 'Ma Shan Zheng', 'Nunito', cursive, sans-serif;
+    font-weight: normal;
     background: linear-gradient(to bottom, #ffffff 0%, #dfefff 100%);
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.3s, box-shadow 0.3s;
+    letter-spacing: 0.5px;
+    transform: rotate(-0.5deg);
   }
   button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 12px rgba(0,0,0,0.3);
+    transform: translateY(-3px) rotate(0deg);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
   }
   .energy-bar {
     width: 100%;
@@ -115,18 +127,147 @@
     user-select: none;
   }
   .feedback-text-large {
-    font-size: 28px;
-    font-weight: bold;
+    font-size: 30px;
+    font-weight: normal;
+    font-family: 'Zhi Mang Xing', 'Ma Shan Zheng', cursive, sans-serif;
     color: #2c4a37;
     text-align: center;
     margin-top: 15px;
+    letter-spacing: 1px;
+    line-height: 1.6;
+    transform: rotate(0.5deg);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  #feedback-text {
+    font-family: 'Ma Shan Zheng', cursive, sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+    line-height: 1.7;
+    color: #2c4a37;
+    transform: rotate(-0.2deg);
   }
   h2 {
     color: #2c4a37;
     text-align: center;
-    margin-bottom: 20px;
-    font-weight: 600;
+    margin-bottom: 25px;
+    font-weight: normal;
+    font-family: 'Long Cang', 'Ma Shan Zheng', cursive, sans-serif;
+    font-size: 28px;
+    letter-spacing: 1px;
+    transform: rotate(-0.3deg);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
   }
+  
+  /* 療癒行動手寫字樣式 */
+  .task-text {
+    font-family: 'Ma Shan Zheng', 'Nunito', cursive, sans-serif;
+    font-size: 26px;
+    font-weight: normal;
+    color: #2c4a37;
+    line-height: 1.6;
+    text-align: center;
+    margin: 20px 0;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(255, 248, 230, 0.9), rgba(255, 252, 245, 0.95));
+    border-left: 5px solid #81c784;
+    border-radius: 15px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+    transform: rotate(-0.8deg);
+    transition: all 0.4s ease;
+    position: relative;
+    letter-spacing: 1px;
+  }
+  
+  .task-text::before {
+    content: "✨";
+    position: absolute;
+    top: -8px;
+    left: -12px;
+    font-size: 20px;
+    opacity: 0.8;
+    animation: gentle-float 3s ease-in-out infinite;
+  }
+  
+  .task-text:hover {
+    transform: rotate(0deg) scale(1.03);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+    background: linear-gradient(135deg, rgba(255, 248, 230, 0.95), rgba(255, 252, 245, 1));
+  }
+  
+  /* 不同的中文手寫字變化 */
+  .task-text.style-2 {
+    font-family: 'Zhi Mang Xing', 'Nunito', cursive, sans-serif;
+    font-size: 24px;
+    transform: rotate(1deg);
+    border-left-color: #f48fb1;
+    letter-spacing: 0.5px;
+  }
+  
+  .task-text.style-2::before {
+    content: "🌸";
+    animation-delay: 1s;
+  }
+  
+  .task-text.style-3 {
+    font-family: 'Long Cang', 'Nunito', cursive, sans-serif;
+    font-size: 23px;
+    transform: rotate(-0.4deg);
+    border-left-color: #64b5f6;
+    letter-spacing: 0.8px;
+  }
+  
+  .task-text.style-3::before {
+    content: "🍃";
+    animation-delay: 2s;
+  }
+  
+  /* 溫柔漂浮動畫 */
+  @keyframes gentle-float {
+    0%, 100% { 
+      transform: translateY(0px) rotate(0deg); 
+      opacity: 0.8;
+    }
+    50% { 
+      transform: translateY(-3px) rotate(5deg); 
+      opacity: 1;
+    }
+  }
+  
+  /* 移動設備優化 */
+  @media screen and (max-width: 768px) {
+    .task-text {
+      font-size: 22px;
+      margin: 15px 0;
+      padding: 16px;
+      letter-spacing: 0.5px;
+    }
+    
+    .task-text.style-2 {
+      font-size: 21px;
+    }
+    
+    .task-text.style-3 {
+      font-size: 20px;
+    }
+  }
+  
+  /* 移動設備優化 */
+  @media screen and (max-width: 768px) {
+    .task-text {
+      font-size: 22px;
+      margin: 15px 0;
+      padding: 16px;
+      letter-spacing: 0.5px;
+    }
+    
+    .task-text.style-2 {
+      font-size: 21px;
+    }
+    
+    .task-text.style-3 {
+      font-size: 20px;
+    }
   
   /* 樹苗動畫樣式 */
   .tree-container {
@@ -162,6 +303,20 @@
     button {
       font-size: 14px;
       padding: 10px 20px;
+    }
+    
+    .task-text {
+      font-size: 20px;
+      margin: 15px 0;
+      padding: 12px;
+    }
+    
+    .task-text.style-2 {
+      font-size: 19px;
+    }
+    
+    .task-text.style-3 {
+      font-size: 18px;
     }
   }
 
@@ -215,7 +370,7 @@
 
 <div class="section task-section" style="display:none;">
   <h2>療癒行動</h2>
-  <p id="task-text"></p>
+  <div class="task-text" id="task-text"></div>
   <button onclick="completeTask()">完成了</button>
 </div>
 
@@ -337,7 +492,21 @@ function shuffleArray(array) {
 
 function showTask() {
   if(shuffledTasks.length === 0) return;
-  document.getElementById('task-text').innerText = shuffledTasks[taskIndex];
+  
+  const taskElement = document.getElementById('task-text');
+  taskElement.innerText = shuffledTasks[taskIndex];
+  
+  // 隨機選擇手寫字樣式
+  const styles = ['', 'style-2', 'style-3'];
+  const randomStyle = styles[Math.floor(Math.random() * styles.length)];
+  
+  // 清除之前的樣式
+  taskElement.className = 'task-text';
+  
+  // 添加新樣式
+  if (randomStyle) {
+    taskElement.classList.add(randomStyle);
+  }
 }
 
 function completeTask() {
