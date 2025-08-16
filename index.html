@@ -1,4 +1,3 @@
-<!-- 用同目錄下的照片當背景的版本 -->
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -21,8 +20,10 @@
     position: relative;
     overflow-x: hidden;
     overflow-y: auto;
-    background: url('background.jpg') no-repeat center top fixed;
-    background-size: contain;
+    /* 修改背景設定，改善移動設備相容性 */
+    background: url('background.jpg') no-repeat center top;
+    background-size: cover;
+    background-attachment: scroll; /* 改為 scroll 避免移動設備問題 */
   }
   body::after {
     content: "";
@@ -31,6 +32,7 @@
     width: 100%; height: 100%;
     background: rgba(255, 255, 255, 0.35);
     z-index: 0;
+    pointer-events: none; /* 避免干擾觸控 */
   }
   h1 { 
     color: #2c4a37; 
@@ -94,7 +96,8 @@
   }
   .energy-bar {
     width: 100%;
-    background: #eee;
+    background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
+    border: 2px solid rgba(76, 175, 80, 0.2);
     border-radius: 25px;
     overflow: hidden;
     margin-top: 10px;
@@ -106,7 +109,7 @@
     transition: width 0.5s;
   }
   .floating-emoji {
-    position: fixed;
+    position: absolute; /* 改為 absolute，相對於 body */
     pointer-events: none;
     z-index: 0;
     user-select: none;
@@ -139,10 +142,39 @@
     transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
   }
-  
-  .energy-bar {
-    background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
-    border: 2px solid rgba(76, 175, 80, 0.2);
+
+  /* 移動設備優化 */
+  @media screen and (max-width: 768px) {
+    body {
+      background-attachment: scroll; /* 確保移動設備使用 scroll */
+      /* 添加漸層背景作為備案 */
+      background-image: linear-gradient(135deg, #e8f5e8 0%, #b8e6b8 50%, #a8d8a8 100%);
+    }
+    
+    .floating-emoji {
+      display: none; /* 在小螢幕隱藏漂浮表情，避免性能問題 */
+    }
+    
+    .section, .daily-quote {
+      width: 90%;
+    }
+    
+    button {
+      font-size: 14px;
+      padding: 10px 20px;
+    }
+  }
+
+  /* 平板設備優化 */
+  @media screen and (min-width: 769px) and (max-width: 1024px) {
+    body {
+      background-attachment: scroll;
+    }
+  }
+
+  @keyframes sparkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
   }
 </style>
 </head>
@@ -153,7 +185,7 @@
 <div class="daily-quote">
   <span class="quote-emoji" id="quote-emoji">🌸</span>
   <p class="quote-text" id="daily-quote-text">沒關係，今天也有好好努力過了。</p>
-  <button id="change-quote-btn">new</button> <!-- 新增按鈕 -->
+  <button id="change-quote-btn">new</button>
 </div>
 
 <div class="section mood-section">
@@ -279,11 +311,9 @@ function setMood(selectedMood) {
   document.querySelector('.task-section').style.display = 'block';
   document.querySelector('.feedback-section').style.display = 'block';
   
-  // 保持當前的能量值，不重置
   updateTree(energy);
   document.getElementById('energy-fill').style.width = energy + '%';
   
-  // 根據當前能量狀態更新回饋文字
   if (energy === 0) {
     document.getElementById('feedback-text').innerText = '開始你的療癒行動，讓小樹苗和你一起成長吧！';
   } else if (energy >= 100) {
@@ -315,7 +345,7 @@ function completeTask() {
 
   if(energy < 100) {
     energy += 20;
-    updateTree(energy); // 更新樹苗
+    updateTree(energy);
     
     if(energy >= 100){
       energy = 100;
@@ -326,11 +356,9 @@ function completeTask() {
     }
     document.getElementById('energy-fill').style.width = energy + '%';
   } else {
-    // 能量已滿 → 觸發彩帶
     launchConfetti();
   }
 
-  // 顯示下一個任務
   taskIndex++;
   if(taskIndex >= shuffledTasks.length){
     taskIndex = 0;
@@ -340,7 +368,7 @@ function completeTask() {
   showTask();
 }
 
-// ===== 樹苗成長動畫 =====
+// 樹苗成長動畫
 function updateTree(energyLevel) {
   const treeSvg = document.getElementById('tree-svg');
   const treeTrunk = document.getElementById('tree-trunk');
@@ -348,20 +376,16 @@ function updateTree(energyLevel) {
   const treeFlowers = document.getElementById('tree-flowers');
   const treeSparkles = document.getElementById('tree-sparkles');
   
-  // 根據能量等級計算成長參數
   const growthFactor = energyLevel / 100;
-  const scale = 0.5 + (growthFactor * 0.8); // 從50%放大到130%
+  const scale = 0.5 + (growthFactor * 0.8);
   
-  // 樹苗整體縮放
   treeSvg.style.transform = `scale(${scale})`;
   
-  // 樹幹高度變化
-  const trunkHeight = 20 + (growthFactor * 25); // 從20增加到45
-  const trunkY = 110 - trunkHeight; // 調整Y位置讓樹幹向上長
+  const trunkHeight = 20 + (growthFactor * 25);
+  const trunkY = 110 - trunkHeight;
   treeTrunk.setAttribute('height', trunkHeight);
   treeTrunk.setAttribute('y', trunkY);
   
-  // 葉子顏色變化（從淺綠到深綠）
   const leafColor = energyLevel < 50 ? '#A5D6A7' : energyLevel < 80 ? '#81C784' : '#66BB6A';
   const leafOpacity = 0.6 + (growthFactor * 0.4);
   
@@ -370,17 +394,14 @@ function updateTree(energyLevel) {
     circle.setAttribute('opacity', leafOpacity);
   });
   
-  // 能量達到60%時出現花朵
   if(energyLevel >= 60) {
     treeFlowers.setAttribute('opacity', (energyLevel - 60) / 40);
   } else {
     treeFlowers.setAttribute('opacity', 0);
   }
   
-  // 能量達到100%時出現閃光效果
   if(energyLevel >= 100) {
     treeSparkles.setAttribute('opacity', 1);
-    // 閃光動畫
     treeSparkles.style.animation = 'sparkle 1.5s ease-in-out infinite';
   } else {
     treeSparkles.setAttribute('opacity', 0);
@@ -388,19 +409,7 @@ function updateTree(energyLevel) {
   }
 }
 
-// CSS 動畫樣式（動態添加）
-const sparkleAnimation = `
-@keyframes sparkle {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.2); }
-}`;
-
-// 將動畫樣式添加到頁面
-const styleSheet = document.createElement('style');
-styleSheet.textContent = sparkleAnimation;
-document.head.appendChild(styleSheet);
-
-// ===== 簡單彩帶函式 =====
+// 彩帶函式
 function launchConfetti() {
   const confettiCount = 100;
   for(let i = 0; i < confettiCount; i++) {
@@ -414,6 +423,7 @@ function launchConfetti() {
     confetti.style.opacity = 0.9;
     confetti.style.borderRadius = '3px';
     confetti.style.zIndex = 9999;
+    confetti.style.pointerEvents = 'none';
     document.body.appendChild(confetti);
 
     const speedY = 2 + Math.random() * 4;
@@ -438,77 +448,88 @@ function launchConfetti() {
   }
 }
 
-// ===== 漂浮表情 =====
+// 漂浮表情（桌面版）
 const emojis = ['🌵','🌞','☁️','🐢','🌸','🍃','🍀','🌻'];
-function createFloatingEmojiOnSides() {
+
+function createFloatingEmoji() {
+  // 檢查是否為移動設備
+  const isMobile = window.innerWidth <= 768;
+  if (isMobile) return;
+
   const emoji = document.createElement('div');
   emoji.className = 'floating-emoji';
   emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
   emoji.style.fontSize = (20 + Math.random() * 30) + 'px';
   emoji.style.opacity = 0.6 + Math.random() * 0.4;
 
-  const img = new Image();
-  img.src = 'background.jpg';
-  img.onload = () => {
-    const imgAspect = img.width / img.height;
-    const containerWidth = window.innerWidth;
-    const containerHeight = window.innerHeight;
-    const bgWidth = containerHeight * imgAspect;
+  // 簡化的位置設定 - 避開中心區域
+  const containerWidth = window.innerWidth;
+  const containerHeight = window.innerHeight;
+  const centerWidth = containerWidth * 0.6; // 中心60%區域
+  const sideWidth = (containerWidth - centerWidth) / 2;
 
-    const margin = 50;
-    const leftMax = (containerWidth - bgWidth) / 2 - margin;
-    const rightMin = containerWidth - ((containerWidth - bgWidth) / 2) + margin;
+  let x = Math.random() < 0.5 
+    ? Math.random() * sideWidth  // 左側
+    : containerWidth - sideWidth + Math.random() * sideWidth; // 右側
+  let y = Math.random() * containerHeight;
 
-    if (leftMax > 0) {
-      let x = Math.random() < 0.5 
-                ? Math.random() * leftMax 
-                : rightMin + Math.random() * (containerWidth - rightMin);
-      let y = Math.random() * containerHeight;
+  emoji.style.left = x + 'px';
+  emoji.style.top = y + 'px';
+  document.body.appendChild(emoji);
 
-      emoji.style.left = x + 'px';
-      emoji.style.top = y + 'px';
-      document.body.appendChild(emoji);
+  let vx = (Math.random() * 0.5 + 0.1) * (Math.random() < 0.5 ? -1 : 1);
+  let vy = (Math.random() * 0.5 + 0.1) * (Math.random() < 0.5 ? -1 : 1);
 
-      let vx = (Math.random() * 0.3 + 0.1) * (Math.random() < 0.5 ? -1 : 1);
-      let vy = (Math.random() * 0.3 + 0.1) * (Math.random() < 0.5 ? -1 : 1);
+  function animate() {
+    x += vx;
+    y += vy;
 
-      function animate() {
-        x += vx;
-        y += vy;
+    // 邊界檢測
+    if (x < 0 || x > containerWidth - emoji.offsetWidth) vx = -vx;
+    if (y < 0 || y > containerHeight - emoji.offsetHeight) vy = -vy;
 
-        if (x < 0) { x = 0; vx = -vx; }
-        if (x > containerWidth - emoji.offsetWidth) { x = containerWidth - emoji.offsetWidth; vx = -vx; }
-
-        if ((x > leftMax && x < rightMin - emoji.offsetWidth)) {
-          vx = -vx;
-          if (x < (leftMax + rightMin) / 2) x = leftMax;
-          else x = rightMin - emoji.offsetWidth;
-        }
-
-        if (y < 0) { y = 0; vy = -vy; }
-        if (y > containerHeight - emoji.offsetHeight) { y = containerHeight - emoji.offsetHeight; vy = -vy; }
-
-        emoji.style.left = x + 'px';
-        emoji.style.top = y + 'px';
-        requestAnimationFrame(animate);
-      }
-      animate();
+    // 避開中心區域
+    const centerLeft = sideWidth;
+    const centerRight = containerWidth - sideWidth;
+    
+    if (x > centerLeft && x < centerRight) {
+      vx = -vx;
+      x = x < containerWidth / 2 ? centerLeft : centerRight;
     }
-  };
+
+    x = Math.max(0, Math.min(containerWidth - emoji.offsetWidth, x));
+    y = Math.max(0, Math.min(containerHeight - emoji.offsetHeight, y));
+
+    emoji.style.left = x + 'px';
+    emoji.style.top = y + 'px';
+    requestAnimationFrame(animate);
+  }
+  animate();
 }
 
-// 初始化
-for(let i=0;i<15;i++) createFloatingEmojiOnSides();
-window.addEventListener('resize', ()=>{
-  document.querySelectorAll('.floating-emoji').forEach(e=>e.remove());
-  for(let i=0;i<15;i++) createFloatingEmojiOnSides();
+// 初始化漂浮表情（僅桌面版）
+function initFloatingEmojis() {
+  const isMobile = window.innerWidth <= 768;
+  if (!isMobile) {
+    for(let i = 0; i < 10; i++) createFloatingEmoji();
+  }
+}
+
+// 視窗調整事件
+let resizeTimeout;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    document.querySelectorAll('.floating-emoji').forEach(e => e.remove());
+    initFloatingEmojis();
+  }, 300);
 });
 
-// 頁面載入時顯示每日溫柔話
+// 頁面載入時初始化
 showDailyQuote();
+initFloatingEmojis();
 
-// ===== 心情任務對照表 =====
-// 請在這裡貼上你的 tasks 物件
+// 心情任務對照表
 const tasks = {
     '焦慮': [
         '深呼吸 1 分鐘，專注感受氣息進出',
@@ -869,7 +890,7 @@ const tasks = {
     ]
 }
 
-  document.getElementById('change-quote-btn').addEventListener('click', showDailyQuote);
+document.getElementById('change-quote-btn').addEventListener('click', showDailyQuote);
 
 </script>
 
