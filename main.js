@@ -1,3 +1,18 @@
+/*
+ * main.js 檔案功能
+ *
+ * 這個檔案是整個網頁的核心運作邏輯，負責處理所有使用者互動和視覺呈現。
+ *
+ * 主要功能包含：
+ * 1. 每日溫柔話語：網頁載入時，隨機顯示一句正向語錄。
+ * 2. 心情選擇與流程控制：當使用者點擊心情按鈕時，啟動「療癒行動」流程，並根據選擇的心情載入對應的任務清單。
+ * 3. 療癒行動與能量系統：管理任務的顯示與切換，並在使用者完成任務後，增加能量值。
+ * 4. 視覺化成長：根據能量值的變化，動態更新 SVG 樹苗的視覺呈現，使其看起來像是在成長。
+ * 5. 動畫效果：處理額外的視覺效果，例如當能量達標時觸發彩帶動畫，或讓表情符號在頁面上漂浮。
+ *
+ * 簡單來說，如果 tasks.js 提供了療癒行動的「內容」，main.js 則負責處理所有「流程與互動」。
+ */
+
 let mood = '';
 let energy = 0;
 let shuffledTasks = [];
@@ -42,7 +57,14 @@ function showDailyQuote() {
 }
 
 function setMood(selectedMood) {
+  // 將所選心情儲存在全域變數中
   mood = selectedMood;
+
+  // 取得療癒行動區塊的標題元素
+  const healingActionTitle = document.getElementById('healing-action-title');
+  // 動態設定標題，顯示所選心情
+  healingActionTitle.innerText = `你的療癒行動：${mood}`;
+
   taskIndex = 0;
   shuffledTasks = shuffleArray([...tasks[mood]]);
   document.querySelector('.task-section').style.display = 'block';
